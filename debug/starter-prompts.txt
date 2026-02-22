@@ -1,0 +1,19 @@
+Implement an app called NexBoard. NexBoard is a desktop app that display a highly customizable dashboard, such as stock pricing chart and clock.
+NexBoard should meet the following requirements:
+- The ability to load mini program similar to IOS UI, you can open these mini program to display the mini program's dashboard.
+- This app has a customizable main dashboard by using widgets. These widgets can be built-in or provided by mini program.
+- This app should always stay on top of the desktop wallpaper and never on top of any apps similar to MacOs wiget.
+- This app should have a transparent look.
+- Start with these build-in widget: clock and timer
+- Start with one mini program: stock tracker: this program should use public API to track selected stock price.
+
+Tech Stack:
+- NexBoard should run on Windows/MacOS and consider portability to Linux and web in the future.
+- Preferred Programming Language: TypeScript/Python
+- Preferred Frameworks: React, tailwindcss
+
+Other Requirements:
+- Favor Development speed over performance.
+- Stick to preferred tech stack if possible to reduce development time
+- Code should be highly readible to ensure easy onboarding
+- Follow production code best practices.

@@ -1,0 +1,119 @@
+import { app, shell, screen, BrowserWindow, Tray, Menu, nativeImage } from 'electron'
+import { join } from 'path'
+import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { enableDesktopMode, disableDesktopMode } from './desktop-mode'
+import { registerIpcHandlers } from './ipc-handlers'
+
+let mainWindow: BrowserWindow | null = null
+let tray: Tray | null = null
+
+const WINDOW_WIDTH = 400
+const WINDOW_HEIGHT = 700
+
+function createWindow(): void {
+  // Position in the top-right corner of the screen
+  const primaryDisplay = screen.getPrimaryDisplay()
+  const { width: screenWidth } = primaryDisplay.workAreaSize
+  const x = screenWidth - WINDOW_WIDTH - 16
+  const y = 16
+
+  mainWindow = new BrowserWindow({
+    width: WINDOW_WIDTH,
+    height: WINDOW_HEIGHT,
+    x,
+    y,
+    frame: false,
+    transparent: true,
+    resizable: true,
+    minimizable: true,
+    maximizable: false,
+    fullscreenable: false,
+    minWidth: 320,
+    minHeight: 400,
+    webPreferences: {
+      preload: join(__dirname, '../preload/index.js'),
+      sandbox: false,
+      contextIsolation: true,
+      nodeIntegration: false
+    }
+  })
+
+  mainWindow.on('ready-to-show', () => {
+    mainWindow?.show()
+    // Always start in desktop mode (behind all other windows)
+    enableDesktopMode(mainWindow!)
+  })
+
+  mainWindow.webContents.setWindowOpenHandler((details) => {
+    shell.openExternal(details.url)
+    return { action: 'deny' }
+  })
+
+  // Load the renderer
+  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    mainWindow.webContents.loadURL(process.env['ELECTRON_RENDERER_URL'])
+  } else {
+    mainWindow.webContents.loadFile(join(__dirname, '../renderer/index.html'))
+  }
+}
+
+function createTray(): void {
+  const icon = nativeImage.createFromDataURL(
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMklEQVQ4T2NkYPj/n4EBBRgZGRkZsIkzMDAwMOASZ2BgYGDEJc7AwMDAiEscmzpkNQAA7sMEEQkMHQ8AAAAASUVORK5CYII='
+  )
+  tray = new Tray(icon)
+
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Show/Hide',
+      click: (): void => {
+        if (!mainWindow) return
+        if (mainWindow.isVisible()) {
+          mainWindow.hide()
+        } else {
+          mainWindow.show()
+        }
+      }
+    },
+    { type: 'separator' },
+    {
+      label: 'Quit',
+      click: (): void => {
+        app.quit()
+      }
+    }
+  ])
+
+  tray.setToolTip('NexBoard')
+  tray.setContextMenu(contextMenu)
+}
+
+app.whenReady().then(() => {
+  electronApp.setAppUserModelId('com.nexboard.app')
+
+  app.on('browser-window-created', (_, window) => {
+    optimizer.watchWindowShortcuts(window)
+  })
+
+  registerIpcHandlers()
+  createWindow()
+  createTray()
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow()
+    }
+  })
+})
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+})
+
+app.on('before-quit', () => {
+  if (mainWindow) {
+    disableDesktopMode(mainWindow)
+  }
+})
