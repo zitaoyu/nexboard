@@ -2,7 +2,8 @@ import { X } from 'lucide-react'
 import { useSettingsStore } from '@/stores/settings-store'
 
 export function SettingsPanel(): React.ReactElement {
-  const { finnhubApiKey, setFinnhubApiKey, toggleSettings } = useSettingsStore()
+  const { finnhubApiKey, setFinnhubApiKey, dashboardOpacity, setDashboardOpacity, toggleSettings } =
+    useSettingsStore()
 
   return (
     <div
@@ -17,13 +18,30 @@ export function SettingsPanel(): React.ReactElement {
           <h2 className="text-sm font-medium">Settings</h2>
           <button
             onClick={toggleSettings}
-            className="rounded-lg p-1 text-white/50 hover:bg-white/10 hover:text-white"
+            className="rounded-lg p-1.5 text-white/50 hover:bg-white/10 hover:text-white"
           >
             <X size={16} />
           </button>
         </div>
 
         <div className="flex flex-col gap-4">
+          {/* Dashboard Opacity */}
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">Dashboard Opacity</span>
+              <span className="text-xs text-white/40">{Math.round(dashboardOpacity * 100)}%</span>
+            </div>
+            <input
+              type="range"
+              min={0.2}
+              max={1}
+              step={0.05}
+              value={dashboardOpacity}
+              onChange={(e) => setDashboardOpacity(parseFloat(e.target.value))}
+              className="mt-1 w-full accent-blue-500"
+            />
+          </div>
+
           {/* Finnhub API Key */}
           <label className="flex flex-col gap-1">
             <span className="text-sm font-medium">Finnhub API Key</span>

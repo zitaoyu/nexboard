@@ -1,0 +1,39 @@
+═══════════════════════════════════════════════
+  NEXBOARD — TODOs
+═══════════════════════════════════════════════
+
+  Add items under TODO, move to DONE when complete.
+  Format:  [ ] Description  (optional notes after double dash --)
+
+───────────────────────────────────────────────
+  TODO
+───────────────────────────────────────────────
+
+───────────────────────────────────────────────
+  DONE
+───────────────────────────────────────────────
+
+[x] Project scaffolding -- Electron + electron-vite, React, TailwindCSS v4
+[x] Transparent frameless window positioned top-right corner
+[x] Always-on-bottom window behavior -- stays behind all other apps
+[x] System tray icon with show/hide and quit
+[x] Drag-and-drop widget grid -- react-grid-layout, 4-column layout
+[x] Widget settings panel -- per-instance config via gear icon
+[x] Widget error boundaries -- crashed widget shows reload button
+[x] Built-in Clock widget -- 12/24h, show seconds, timezone
+[x] Built-in Timer widget -- countdown and stopwatch modes
+[x] Mini program launcher -- iOS-style icon grid
+[x] Stock Tracker mini program -- Finnhub API, watchlist, price chart
+[x] Stock Ticker dashboard widget -- compact multi-symbol price display
+[x] Settings panel -- Finnhub API key input
+[x] State persistence -- layout and settings saved to localStorage
+[x] README and CLAUDE.md documentation
+[x] npm run package script for building distributable installer
+[x] Widget settings/close buttons unresponsive -- moved widget-drag-handle to grip icon only so buttons are no longer blocked
+[x] Add configuration to adjust dashboard opacity -- slider in Settings panel (20%–100%), persisted
+[x] Add widget animations / transition effects -- fade-in + slide-up mount animation on each widget
+[x] Add window resize persistence -- save/restore window size and position across restarts
+[x] Dashboard opacity only affects app background -- background uses a separate absolutely-positioned layer so widgets stay at full opacity
+[x] Make all buttons slightly bigger -- increased padding (p-1→p-1.5) and icon sizes across title bar, widget controls, modals
+[x] Drag preview is now grey + rounded -- overrode .react-grid-placeholder in global.css (white/8 bg, border, rounded-xl)
+[x] Mini programs open as inline dashboard view -- clicking grid icon switches main content to MiniProgramsPage instead of showing a modal popup

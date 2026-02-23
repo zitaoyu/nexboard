@@ -14,10 +14,10 @@ export function AddWidgetButton(): React.ReactElement {
       {/* Floating button */}
       <button
         onClick={() => setOpen(true)}
-        className="absolute bottom-4 right-4 z-40 rounded-full bg-blue-500/80 p-2.5 shadow-lg transition-colors hover:bg-blue-500"
+        className="absolute bottom-4 right-4 z-40 rounded-full bg-blue-500/80 p-3 shadow-lg transition-colors hover:bg-blue-500"
         title="Add widget"
       >
-        <Plus size={18} />
+        <Plus size={20} />
       </button>
 
       {/* Modal overlay */}
@@ -34,7 +34,7 @@ export function AddWidgetButton(): React.ReactElement {
               <h2 className="text-lg font-medium">Add Widget</h2>
               <button
                 onClick={() => setOpen(false)}
-                className="rounded-lg p-1 text-white/50 hover:bg-white/10 hover:text-white"
+                className="rounded-lg p-1.5 text-white/50 hover:bg-white/10 hover:text-white"
               >
                 <X size={18} />
               </button>

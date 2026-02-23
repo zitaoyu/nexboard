@@ -3,6 +3,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { enableDesktopMode, disableDesktopMode } from './desktop-mode'
 import { registerIpcHandlers } from './ipc-handlers'
+import { loadWindowBounds, saveWindowBounds } from './window-state'
 
 let mainWindow: BrowserWindow | null = null
 let tray: Tray | null = null
@@ -11,17 +12,23 @@ const WINDOW_WIDTH = 400
 const WINDOW_HEIGHT = 700
 
 function createWindow(): void {
-  // Position in the top-right corner of the screen
+  // Position in the top-right corner of the screen (used as default)
   const primaryDisplay = screen.getPrimaryDisplay()
   const { width: screenWidth } = primaryDisplay.workAreaSize
-  const x = screenWidth - WINDOW_WIDTH - 16
-  const y = 16
+  const defaultBounds = {
+    x: screenWidth - WINDOW_WIDTH - 16,
+    y: 16,
+    width: WINDOW_WIDTH,
+    height: WINDOW_HEIGHT
+  }
+
+  const bounds = loadWindowBounds(defaultBounds)
 
   mainWindow = new BrowserWindow({
-    width: WINDOW_WIDTH,
-    height: WINDOW_HEIGHT,
-    x,
-    y,
+    width: bounds.width,
+    height: bounds.height,
+    x: bounds.x,
+    y: bounds.y,
     frame: false,
     transparent: true,
     resizable: true,
@@ -43,6 +50,19 @@ function createWindow(): void {
     // Always start in desktop mode (behind all other windows)
     enableDesktopMode(mainWindow!)
   })
+
+  // Persist window bounds when the user moves or resizes the window
+  let saveTimer: ReturnType<typeof setTimeout> | null = null
+  const scheduleSave = (): void => {
+    if (saveTimer) clearTimeout(saveTimer)
+    saveTimer = setTimeout(() => {
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        saveWindowBounds(mainWindow.getBounds())
+      }
+    }, 500)
+  }
+  mainWindow.on('move', scheduleSave)
+  mainWindow.on('resize', scheduleSave)
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)

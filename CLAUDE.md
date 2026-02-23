@@ -14,6 +14,10 @@ npm run lint         # ESLint with auto-fix
 
 There are no automated tests. Verification is done by running `npm run dev` and testing manually.
 
+## Task tracking
+
+Pending and completed features are tracked in `TODOs.txt` at the repo root. When implementing a feature, move its line from `TODO` to `DONE` and change `[ ]` to `[x]`. When adding new planned work, append it under `TODO`.
+
 ## Architecture
 
 NexBoard is an Electron desktop app. The codebase follows the standard Electron three-process model:
