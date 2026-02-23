@@ -1,17 +1,39 @@
 import { useQuery } from '@tanstack/react-query'
-import { getCandles, type StockCandle } from '../api/finnhub'
-import { useSettingsStore } from '@/stores/settings-store'
+import type { StockCandle } from '../api/finnhub'
 
-export function useStockCandles(symbol: string, resolution = 'D', days = 30) {
-  const apiKey = useSettingsStore((s) => s.finnhubApiKey)
+async function fetchYahooCandles(symbol: string, range: string): Promise<StockCandle> {
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=${range}`
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const json = await window.api.httpGet(url) as any
+  const result = json?.chart?.result?.[0]
+  if (!result) return { s: 'no_data', c: [], h: [], l: [], o: [], t: [], v: [] }
+  const { timestamp, indicators } = result
+  const quote = indicators?.quote?.[0]
+  if (!timestamp || !quote) return { s: 'no_data', c: [], h: [], l: [], o: [], t: [], v: [] }
 
-  const to = Math.floor(Date.now() / 1000)
-  const from = to - days * 24 * 60 * 60
+  // Yahoo Finance includes null for non-trading days — filter them out
+  const indices = (timestamp as number[])
+    .map((t, i) => ({ t, i }))
+    .filter(({ i }) => quote.close[i] != null)
+
+  return {
+    s: 'ok',
+    t: indices.map(({ t }) => t),
+    c: indices.map(({ i }) => quote.close[i]),
+    h: indices.map(({ i }) => quote.high[i]),
+    l: indices.map(({ i }) => quote.low[i]),
+    o: indices.map(({ i }) => quote.open[i]),
+    v: indices.map(({ i }) => quote.volume[i])
+  }
+}
+
+export function useStockCandles(symbol: string, _resolution = 'D', days = 30) {
+  const range = days <= 30 ? '1mo' : days <= 90 ? '3mo' : '1y'
 
   return useQuery<StockCandle>({
-    queryKey: ['stock-candles', symbol, resolution, days],
-    queryFn: () => getCandles(symbol, resolution, from, to, apiKey),
-    enabled: !!symbol && !!apiKey,
-    staleTime: 5 * 60_000 // 5 minutes for historical data
+    queryKey: ['stock-candles', symbol, range],
+    queryFn: () => fetchYahooCandles(symbol, range),
+    enabled: !!symbol,
+    staleTime: 5 * 60_000
   })
 }

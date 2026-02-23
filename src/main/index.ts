@@ -1,7 +1,6 @@
 import { app, shell, screen, BrowserWindow, Tray, Menu, nativeImage } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import { enableDesktopMode } from './desktop-mode'
 import { registerIpcHandlers } from './ipc-handlers'
 import { loadWindowBounds, saveWindowBounds } from './window-state'
 
@@ -47,8 +46,6 @@ function createWindow(): void {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow?.show()
-    // Always start in desktop mode (behind all other windows)
-    enableDesktopMode(mainWindow!)
   })
 
   // Persist window bounds when the user moves or resizes the window

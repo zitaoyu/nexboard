@@ -2,6 +2,9 @@ appId: com.nexboard.app
 productName: NexBoard
 directories:
   buildResources: build
+publish:
+  provider: github
+  releaseType: release
 files:
   - '!**/.vscode/*'
   - '!src/*'

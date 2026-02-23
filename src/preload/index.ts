@@ -3,7 +3,9 @@ import { electronAPI } from '@electron-toolkit/preload'
 
 const api = {
   getPlatform: (): Promise<{ platform: string; version: string }> =>
-    ipcRenderer.invoke('platform:get')
+    ipcRenderer.invoke('platform:get'),
+  httpGet: (url: string): Promise<unknown> =>
+    ipcRenderer.invoke('http:get', url)
 }
 
 if (process.contextIsolated) {

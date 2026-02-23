@@ -38,7 +38,7 @@ export function DashboardGrid(): React.ReactElement {
   )
 
   return (
-    <div className="relative h-full w-full overflow-auto p-3">
+    <div className="group relative h-full w-full overflow-auto p-3">
       <ResponsiveGridLayout
         className="layout"
         layouts={{ lg: layouts }}
