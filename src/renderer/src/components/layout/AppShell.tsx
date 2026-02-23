@@ -14,7 +14,7 @@ export function AppShell(): React.ReactElement {
   const closeLauncher = useMiniProgramStore((s) => s.closeLauncher)
   const toggleSettings = useSettingsStore((s) => s.toggleSettings)
   const settingsOpen = useSettingsStore((s) => s.settingsOpen)
-  const dashboardOpacity = useSettingsStore((s) => s.dashboardOpacity)
+  const dashboardBackgroundOpacity = useSettingsStore((s) => s.dashboardBackgroundOpacity)
 
   const activeProgram = activeProgramId ? miniProgramRegistry.get(activeProgramId) : null
   const isSubView = showLauncher || !!activeProgram
@@ -39,11 +39,11 @@ export function AppShell(): React.ReactElement {
       : 'NexBoard'
 
   return (
-    <div className="relative flex h-full w-full flex-col overflow-hidden rounded-xl border border-white/10">
+    <div className="group relative flex h-full w-full flex-col overflow-hidden rounded-xl">
       {/* Background layer — opacity-controlled independently of content */}
       <div
-        className="absolute inset-0 rounded-xl bg-gray-900/95 backdrop-blur-md"
-        style={{ opacity: dashboardOpacity }}
+        className="absolute inset-0 rounded-xl backdrop-blur-md"
+        style={{ backgroundColor: `rgba(0,0,0,${dashboardBackgroundOpacity})` }}
       />
 
       {/* All content sits above the background at full opacity */}

@@ -14,7 +14,7 @@ export function AddWidgetButton(): React.ReactElement {
       {/* Floating button */}
       <button
         onClick={() => setOpen(true)}
-        className="absolute bottom-4 right-4 z-40 rounded-full bg-blue-500/80 p-3 shadow-lg transition-colors hover:bg-blue-500"
+        className={`absolute bottom-4 right-4 z-40 rounded-full bg-white/10 p-3 shadow-lg transition-all hover:bg-white/20 group-hover:opacity-100 ${open ? 'opacity-100' : 'opacity-0'}`}
         title="Add widget"
       >
         <Plus size={20} />

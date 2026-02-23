@@ -1,7 +1,7 @@
 import { app, shell, screen, BrowserWindow, Tray, Menu, nativeImage } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import { enableDesktopMode, disableDesktopMode } from './desktop-mode'
+import { enableDesktopMode } from './desktop-mode'
 import { registerIpcHandlers } from './ipc-handlers'
 import { loadWindowBounds, saveWindowBounds } from './window-state'
 
@@ -78,9 +78,10 @@ function createWindow(): void {
 }
 
 function createTray(): void {
-  const icon = nativeImage.createFromDataURL(
-    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMklEQVQ4T2NkYPj/n4EBBRgZGRkZsIkzMDAwMOASZ2BgYGDEJc7AwMDAiEscmzpkNQAA7sMEEQkMHQ8AAAAASUVORK5CYII='
-  )
+  const iconPath = is.dev
+    ? join(__dirname, '../../resources/tray-icon.png')
+    : join(process.resourcesPath, 'tray-icon.png')
+  const icon = nativeImage.createFromPath(iconPath)
   tray = new Tray(icon)
 
   const contextMenu = Menu.buildFromTemplate([
@@ -132,8 +133,3 @@ app.on('window-all-closed', () => {
   }
 })
 
-app.on('before-quit', () => {
-  if (mainWindow) {
-    disableDesktopMode(mainWindow)
-  }
-})

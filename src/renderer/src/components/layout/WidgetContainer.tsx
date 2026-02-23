@@ -1,10 +1,11 @@
-import { useState, useEffect, Component, type ReactNode } from 'react'
-import { Settings, X, GripHorizontal } from 'lucide-react'
-import { useDashboardStore } from '@/stores/dashboard-store'
-import { widgetRegistry } from '@/widgets/registry'
+import { useState, useEffect, Component, type ReactNode } from "react";
+import { Settings, X, GripHorizontal } from "lucide-react";
+import { useDashboardStore } from "@/stores/dashboard-store";
+import { useSettingsStore } from "@/stores/settings-store";
+import { widgetRegistry } from "@/widgets/registry";
 
 interface WidgetContainerProps {
-  instanceId: string
+  instanceId: string;
 }
 
 /** Error boundary that catches crashes inside individual widgets */
@@ -13,12 +14,12 @@ class WidgetErrorBoundary extends Component<
   { hasError: boolean }
 > {
   constructor(props: { children: ReactNode; widgetName: string }) {
-    super(props)
-    this.state = { hasError: false }
+    super(props);
+    this.state = { hasError: false };
   }
 
   static getDerivedStateFromError(): { hasError: boolean } {
-    return { hasError: true }
+    return { hasError: true };
   }
 
   render(): ReactNode {
@@ -33,54 +34,70 @@ class WidgetErrorBoundary extends Component<
             Reload
           </button>
         </div>
-      )
+      );
     }
-    return this.props.children
+    return this.props.children;
   }
 }
 
-export function WidgetContainer({ instanceId }: WidgetContainerProps): React.ReactElement {
-  const [showSettings, setShowSettings] = useState(false)
-  const [mounted, setMounted] = useState(false)
+export function WidgetContainer({
+  instanceId,
+}: WidgetContainerProps): React.ReactElement {
+  const [showSettings, setShowSettings] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const id = requestAnimationFrame(() => setMounted(true))
-    return () => cancelAnimationFrame(id)
-  }, [])
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
-  const widget = useDashboardStore((s) => s.widgets.find((w) => w.instanceId === instanceId))
-  const removeWidget = useDashboardStore((s) => s.removeWidget)
-  const updateWidgetConfig = useDashboardStore((s) => s.updateWidgetConfig)
+  const widget = useDashboardStore((s) =>
+    s.widgets.find((w) => w.instanceId === instanceId),
+  );
+  const removeWidget = useDashboardStore((s) => s.removeWidget);
+  const updateWidgetConfig = useDashboardStore((s) => s.updateWidgetConfig);
+  const widgetBackgroundOpacity = useSettingsStore((s) => s.widgetBackgroundOpacity);
 
   if (!widget) {
-    return <div className="h-full rounded-xl bg-white/5 p-2 text-sm text-white/30">Not found</div>
+    return (
+      <div className="h-full rounded-xl bg-black/60 p-2 text-sm text-white/30">
+        Not found
+      </div>
+    );
   }
 
-  const definition = widgetRegistry.get(widget.widgetId)
+  const definition = widgetRegistry.get(widget.widgetId);
   if (!definition) {
     return (
-      <div className="h-full rounded-xl bg-white/5 p-2 text-sm text-white/30">
+      <div className="h-full rounded-xl bg-black/60 p-2 text-sm text-white/30">
         Unknown widget: {widget.widgetId}
       </div>
-    )
+    );
   }
 
-  const { Component: WidgetComponent, SettingsComponent, manifest } = definition
+  const {
+    Component: WidgetComponent,
+    SettingsComponent,
+    manifest,
+  } = definition;
 
   const handleConfigChange = (config: Record<string, unknown>): void => {
-    updateWidgetConfig(instanceId, config)
-  }
+    updateWidgetConfig(instanceId, config);
+  };
 
   return (
     <div
-      className={`group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/10 bg-white/5 backdrop-blur-md transition-all duration-300 ease-out ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}`}
+      className={`group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/10 backdrop-blur-md transition-all duration-300 ease-out ${mounted ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"}`}
+      style={{ backgroundColor: `rgba(0,0,0,${widgetBackgroundOpacity})` }}
     >
       {/* Title bar — visible on hover */}
       <div className="flex shrink-0 items-center gap-1 px-2 py-1 opacity-0 transition-opacity group-hover:opacity-100">
         {/* Drag handle — only this area initiates dragging */}
         <div className="widget-drag-handle flex min-w-0 flex-1 cursor-grab items-center gap-1">
           <GripHorizontal size={12} className="shrink-0 text-white/40" />
-          <span className="truncate text-xs text-white/50">{manifest.name}</span>
+          <span className="truncate text-xs text-white/50">
+            {manifest.name}
+          </span>
         </div>
 
         {SettingsComponent && (
@@ -121,5 +138,5 @@ export function WidgetContainer({ instanceId }: WidgetContainerProps): React.Rea
         )}
       </div>
     </div>
-  )
+  );
 }

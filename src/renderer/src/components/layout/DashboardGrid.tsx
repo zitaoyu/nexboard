@@ -1,6 +1,8 @@
 import { useMemo, useCallback } from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
+import { Grid3X3 } from 'lucide-react'
 import { useDashboardStore } from '@/stores/dashboard-store'
+import { useMiniProgramStore } from '@/stores/mini-program-store'
 import { widgetRegistry } from '@/widgets/registry'
 import { WidgetContainer } from './WidgetContainer'
 import { AddWidgetButton } from './AddWidgetButton'
@@ -12,6 +14,7 @@ const ResponsiveGridLayout = WidthProvider(Responsive)
 export function DashboardGrid(): React.ReactElement {
   const widgets = useDashboardStore((s) => s.widgets)
   const updateLayout = useDashboardStore((s) => s.updateLayout)
+  const openLauncher = useMiniProgramStore((s) => s.openLauncher)
 
   const layouts = useMemo(() => {
     return widgets.map((w) => ({
@@ -54,6 +57,13 @@ export function DashboardGrid(): React.ReactElement {
         ))}
       </ResponsiveGridLayout>
 
+      <button
+        onClick={openLauncher}
+        className="absolute bottom-4 right-16 z-40 rounded-full bg-white/10 p-3 shadow-lg transition-all opacity-0 hover:bg-white/20 group-hover:opacity-100"
+        title="Mini Programs"
+      >
+        <Grid3X3 size={20} />
+      </button>
       <AddWidgetButton />
     </div>
   )

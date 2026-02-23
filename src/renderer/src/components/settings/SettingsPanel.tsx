@@ -2,7 +2,7 @@ import { X } from 'lucide-react'
 import { useSettingsStore } from '@/stores/settings-store'
 
 export function SettingsPanel(): React.ReactElement {
-  const { finnhubApiKey, setFinnhubApiKey, dashboardOpacity, setDashboardOpacity, toggleSettings } =
+  const { finnhubApiKey, setFinnhubApiKey, widgetBackgroundOpacity, setWidgetBackgroundOpacity, dashboardBackgroundOpacity, setDashboardBackgroundOpacity, toggleSettings } =
     useSettingsStore()
 
   return (
@@ -25,19 +25,36 @@ export function SettingsPanel(): React.ReactElement {
         </div>
 
         <div className="flex flex-col gap-4">
-          {/* Dashboard Opacity */}
+          {/* Dashboard Background Opacity */}
           <div className="flex flex-col gap-1">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Dashboard Opacity</span>
-              <span className="text-xs text-white/40">{Math.round(dashboardOpacity * 100)}%</span>
+              <span className="text-sm font-medium">Dashboard Background Opacity</span>
+              <span className="text-xs text-white/40">{Math.round(dashboardBackgroundOpacity * 100)}%</span>
             </div>
             <input
               type="range"
-              min={0.2}
+              min={0}
               max={1}
               step={0.05}
-              value={dashboardOpacity}
-              onChange={(e) => setDashboardOpacity(parseFloat(e.target.value))}
+              value={dashboardBackgroundOpacity}
+              onChange={(e) => setDashboardBackgroundOpacity(parseFloat(e.target.value))}
+              className="mt-1 w-full accent-blue-500"
+            />
+          </div>
+
+          {/* Widget Background Opacity */}
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">Widget Background Opacity</span>
+              <span className="text-xs text-white/40">{Math.round(widgetBackgroundOpacity * 100)}%</span>
+            </div>
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.05}
+              value={widgetBackgroundOpacity}
+              onChange={(e) => setWidgetBackgroundOpacity(parseFloat(e.target.value))}
               className="mt-1 w-full accent-blue-500"
             />
           </div>
