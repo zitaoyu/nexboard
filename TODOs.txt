@@ -37,3 +37,8 @@
 [x] Make all buttons slightly bigger -- increased padding (p-1→p-1.5) and icon sizes across title bar, widget controls, modals
 [x] Drag preview is now grey + rounded -- overrode .react-grid-placeholder in global.css (white/8 bg, border, rounded-xl)
 [x] Mini programs open as inline dashboard view -- clicking grid icon switches main content to MiniProgramsPage instead of showing a modal popup
+[x] Make widget button bigger -- p-1→p-1.5, icon 13→15px in WidgetContainer
+[x] All four corners of widget can resize, resize icon removed -- added resizeHandles=['se','sw','ne','nw'], hid ::after arrow via CSS
+[x] Change Stock Tracker default stock from Apple to Microsoft -- StockTickerWidget default symbol AAPL→MSFT
+[x] Migrate from Finnhub API to Yahoo Finance free API -- no API key needed; yahoo.ts + use-stock-data.ts replace Finnhub quote/search; settings-store and SettingsPanel cleaned up
+[x] Stock widget mini intraday chart -- compact StockQuoteCard shows 1-min sparkline (recharts AreaChart) from Yahoo ?interval=1m&range=1d, refreshes every 60s

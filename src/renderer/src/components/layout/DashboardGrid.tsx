@@ -47,6 +47,7 @@ export function DashboardGrid(): React.ReactElement {
         rowHeight={70}
         onLayoutChange={onLayoutChange}
         draggableHandle=".widget-drag-handle"
+        resizeHandles={['se', 'sw', 'ne', 'nw']}
         containerPadding={[0, 0]}
         margin={[8, 8]}
       >

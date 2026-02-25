@@ -1,8 +1,18 @@
 import { app, shell, screen, BrowserWindow, Tray, Menu, nativeImage } from 'electron'
 import { join } from 'path'
+import { rmSync } from 'fs'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { registerIpcHandlers } from './ipc-handlers'
 import { loadWindowBounds, saveWindowBounds } from './window-state'
+
+// Clean-dev mode: wipe and redirect userData so the app starts with no persisted state.
+// Triggered by NEXBOARD_CLEAN=1 (set via `npm run dev:clean`).
+if (process.env.NEXBOARD_CLEAN === '1') {
+  const cleanPath = join(app.getPath('temp'), 'nexboard-clean-dev')
+  try { rmSync(cleanPath, { recursive: true, force: true }) } catch { /* ignore */ }
+  app.setPath('userData', cleanPath)
+  console.log('[clean-dev] userData wiped and redirected to', cleanPath)
+}
 
 let mainWindow: BrowserWindow | null = null
 let tray: Tray | null = null

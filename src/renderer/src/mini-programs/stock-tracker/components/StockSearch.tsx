@@ -1,8 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Search } from 'lucide-react'
-import { searchSymbol } from '../api/finnhub'
-import { useSettingsStore } from '@/stores/settings-store'
+import { searchSymbol } from '../api/yahoo'
 
 interface StockSearchProps {
   onSelect: (symbol: string) => void
@@ -10,12 +9,11 @@ interface StockSearchProps {
 
 export function StockSearch({ onSelect }: StockSearchProps): React.ReactElement {
   const [query, setQuery] = useState('')
-  const apiKey = useSettingsStore((s) => s.finnhubApiKey)
 
   const { data, isLoading } = useQuery({
     queryKey: ['stock-search', query],
-    queryFn: () => searchSymbol(query, apiKey),
-    enabled: query.length >= 1 && !!apiKey,
+    queryFn: () => searchSymbol(query),
+    enabled: query.length >= 1,
     staleTime: 60_000
   })
 

@@ -17,8 +17,7 @@ export function registerIpcHandlers(): void {
   })
 
   ipcMain.handle('http:get', async (_event, url: string) => {
-    const request = net.fetch(url)
-    const res = await request
+    const res = await net.fetch(url)
     if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`)
     return res.json()
   })

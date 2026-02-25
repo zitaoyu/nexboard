@@ -103,19 +103,19 @@ export function WidgetContainer({
         {SettingsComponent && (
           <button
             onClick={() => setShowSettings(!showSettings)}
-            className="rounded p-1 text-white/40 hover:bg-white/10 hover:text-white/70"
+            className="rounded p-1.5 text-white/40 hover:bg-white/10 hover:text-white/70"
             title="Settings"
           >
-            <Settings size={13} />
+            <Settings size={15} />
           </button>
         )}
 
         <button
           onClick={() => removeWidget(instanceId)}
-          className="rounded p-1 text-white/40 hover:bg-red-500/20 hover:text-red-400"
+          className="rounded p-1.5 text-white/40 hover:bg-red-500/20 hover:text-red-400"
           title="Remove"
         >
-          <X size={13} />
+          <X size={15} />
         </button>
       </div>
 

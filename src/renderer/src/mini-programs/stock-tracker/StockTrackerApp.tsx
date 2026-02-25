@@ -1,11 +1,9 @@
 import { useState, useCallback } from 'react'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { useSettingsStore } from '@/stores/settings-store'
 import { StockSearch } from './components/StockSearch'
 import { StockChart } from './components/StockChart'
 import { WatchList } from './components/WatchList'
-import { Settings } from 'lucide-react'
 
 /** Persisted watchlist store for the stock tracker */
 interface WatchListState {
@@ -34,8 +32,6 @@ const useWatchListStore = create<WatchListState>()(
 export function StockTrackerApp(): React.ReactElement {
   const [selectedSymbol, setSelectedSymbol] = useState<string | null>(null)
   const { symbols, addSymbol, removeSymbol } = useWatchListStore()
-  const apiKey = useSettingsStore((s) => s.finnhubApiKey)
-  const toggleSettings = useSettingsStore((s) => s.toggleSettings)
 
   const handleSearchSelect = useCallback(
     (symbol: string) => {
@@ -44,28 +40,6 @@ export function StockTrackerApp(): React.ReactElement {
     },
     [addSymbol]
   )
-
-  if (!apiKey) {
-    return (
-      <div className="flex h-full flex-col items-center justify-center gap-4">
-        <div className="text-center">
-          <h2 className="mb-2 text-xl font-medium">Stock Tracker</h2>
-          <p className="max-w-sm text-sm text-white/50">
-            To get started, you need a free Finnhub API key. Visit{' '}
-            <span className="text-blue-400">finnhub.io</span> to create an account, then add your
-            key in settings.
-          </p>
-        </div>
-        <button
-          onClick={toggleSettings}
-          className="flex items-center gap-2 rounded-lg bg-blue-500/80 px-4 py-2 text-sm transition-colors hover:bg-blue-500"
-        >
-          <Settings size={14} />
-          Open Settings
-        </button>
-      </div>
-    )
-  }
 
   return (
     <div className="flex h-full flex-col gap-3 overflow-auto">

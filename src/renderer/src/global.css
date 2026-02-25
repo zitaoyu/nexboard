@@ -19,6 +19,11 @@ body,
   user-select: none;
 }
 
+/* Hide resize arrow icons — corners are still interactive (cursor changes on hover) */
+.react-resizable-handle::after {
+  display: none;
+}
+
 /* Drag placeholder — grey + rounded to match widget shape */
 .react-grid-placeholder {
   background: rgba(255, 255, 255, 0.08) !important;
