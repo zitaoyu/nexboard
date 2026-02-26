@@ -2,7 +2,7 @@ import { X } from 'lucide-react'
 import { useSettingsStore } from '@/stores/settings-store'
 
 export function SettingsPanel(): React.ReactElement {
-  const { widgetBackgroundOpacity, setWidgetBackgroundOpacity, dashboardBackgroundOpacity, setDashboardBackgroundOpacity, toggleSettings } =
+  const { widgetBackgroundOpacity, setWidgetBackgroundOpacity, dashboardBackgroundOpacity, setDashboardBackgroundOpacity, uiScale, setUiScale, toggleSettings } =
     useSettingsStore()
 
   return (
@@ -55,6 +55,23 @@ export function SettingsPanel(): React.ReactElement {
               step={0.05}
               value={widgetBackgroundOpacity}
               onChange={(e) => setWidgetBackgroundOpacity(parseFloat(e.target.value))}
+              className="mt-1 w-full accent-blue-500"
+            />
+          </div>
+
+          {/* UI Scale */}
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">UI Scale</span>
+              <span className="text-xs text-white/40">{Math.round(uiScale * 100)}%</span>
+            </div>
+            <input
+              type="range"
+              min={0.75}
+              max={1.5}
+              step={0.05}
+              value={uiScale}
+              onChange={(e) => setUiScale(parseFloat(e.target.value))}
               className="mt-1 w-full accent-blue-500"
             />
           </div>

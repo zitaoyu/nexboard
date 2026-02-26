@@ -3,7 +3,7 @@ import { Plus, X } from 'lucide-react'
 import type { WidgetProps } from '@/types/widget'
 
 export function StockTickerSettings({ config, onConfigChange }: WidgetProps): React.ReactElement {
-  const symbols = (config.symbols as string[]) || ['AAPL']
+  const symbols = (config.symbols as string[]) || ['MSFT']
   const [input, setInput] = useState('')
 
   const addSymbol = (): void => {

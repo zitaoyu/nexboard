@@ -9,7 +9,7 @@ export const stockTickerWidget: WidgetDefinition = {
     description: 'Display real-time stock prices on your dashboard',
     defaultSize: { w: 2, h: 3 },
     minSize: { w: 2, h: 2 },
-    maxSize: { w: 4, h: 6 },
+    maxSize: { w: 4, h: 12 },
     sourceProgram: 'stock-tracker',
     icon: 'TrendingUp'
   },

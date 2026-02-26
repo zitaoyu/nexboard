@@ -42,3 +42,15 @@
 [x] Change Stock Tracker default stock from Apple to Microsoft -- StockTickerWidget default symbol AAPL→MSFT
 [x] Migrate from Finnhub API to Yahoo Finance free API -- no API key needed; yahoo.ts + use-stock-data.ts replace Finnhub quote/search; settings-store and SettingsPanel cleaned up
 [x] Stock widget mini intraday chart -- compact StockQuoteCard shows 1-min sparkline (recharts AreaChart) from Yahoo ?interval=1m&range=1d, refreshes every 60s
+[x] Hide scrollbar inside widgets -- scoped CSS in global.css (.react-grid-item)
+[x] Increase stock widget max height 2x -- maxSize.h 6→12
+[x] UI Scale setting -- single slider (75%–150%) in SettingsPanel; applied via html font-size in AppShell useEffect
+[x] Change default opacities -- dashboard 0→0.2, widget 0.2→0.6
+[x] Boost background opacity in subviews -- effectiveBgOpacity = max(setting, 0.3) when isSubView
+[x] Remove mini program button from title bar -- MiniProgramLauncher removed from AppShell header
+[x] Move Back button to bottom-left -- removed from title bar, added as shrink-0 footer below content area
+[x] Increase widget text/icon size 20% -- zoom: 1.2 wrapper on WidgetComponent in WidgetContainer
+[x] Fix AAPL default in StockTickerSettings -- changed to MSFT
+[x] Default widgets on first install -- Clock, Timer, Stock pre-populated in dashboard-store DEFAULT_WIDGETS
+[x] Timer milliseconds -- state changed to ms, 10ms interval, formatTime shows MM:SS.cs
+[x] Fix Timer countdown ring overlapping buttons -- replaced SVG circle ring with a flat progress bar (blue→amber→red color shift as time runs out, glow effect)

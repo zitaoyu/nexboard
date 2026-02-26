@@ -119,23 +119,25 @@ export function WidgetContainer({
         </button>
       </div>
 
-      {/* Widget content or settings */}
+      {/* Widget content or settings — both zoomed 20% for readability */}
       <div className="min-h-0 flex-1">
-        {showSettings && SettingsComponent ? (
-          <SettingsComponent
-            instanceId={instanceId}
-            config={widget.config}
-            onConfigChange={handleConfigChange}
-          />
-        ) : (
-          <WidgetErrorBoundary widgetName={manifest.name}>
-            <WidgetComponent
+        <div style={{ zoom: 1.2 }} className="h-full">
+          {showSettings && SettingsComponent ? (
+            <SettingsComponent
               instanceId={instanceId}
               config={widget.config}
               onConfigChange={handleConfigChange}
             />
-          </WidgetErrorBoundary>
-        )}
+          ) : (
+            <WidgetErrorBoundary widgetName={manifest.name}>
+              <WidgetComponent
+                instanceId={instanceId}
+                config={widget.config}
+                onConfigChange={handleConfigChange}
+              />
+            </WidgetErrorBoundary>
+          )}
+        </div>
       </div>
     </div>
   );

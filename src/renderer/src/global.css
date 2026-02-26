@@ -19,6 +19,10 @@ body,
   user-select: none;
 }
 
+/* Hide scrollbars inside widgets — scrolling still works */
+.react-grid-item ::-webkit-scrollbar { display: none; }
+.react-grid-item * { scrollbar-width: none; }
+
 /* Hide resize arrow icons — corners are still interactive (cursor changes on hover) */
 .react-resizable-handle::after {
   display: none;
