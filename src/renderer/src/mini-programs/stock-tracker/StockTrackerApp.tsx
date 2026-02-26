@@ -16,11 +16,11 @@ const useWatchListStore = create<WatchListState>()(
   persist(
     (set) => ({
       symbols: [],
-      addSymbol: (symbol: string): void =>
+      addSymbol: (symbol: string) =>
         set((state) => ({
           symbols: state.symbols.includes(symbol) ? state.symbols : [...state.symbols, symbol]
         })),
-      removeSymbol: (symbol: string): void =>
+      removeSymbol: (symbol: string) =>
         set((state) => ({
           symbols: state.symbols.filter((s) => s !== symbol)
         }))

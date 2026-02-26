@@ -29,7 +29,7 @@ export interface WidgetInstance {
   /** User-configured settings for this instance */
   config: Record<string, unknown>
   /** react-grid-layout position */
-  layout: { x: number; y: number; w: number; h: number }
+  layout: { x: number; y: number; w: number; h: number; minW?: number; minH?: number; maxW?: number; maxH?: number }
 }
 
 /** Props passed to every widget component */

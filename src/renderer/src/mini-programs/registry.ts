@@ -1,6 +1,7 @@
 import type { MiniProgramDefinition } from '@/types/mini-program'
 import { widgetRegistry } from '@/widgets/registry'
 import { stockTrackerProgram } from './stock-tracker/manifest'
+import { todoProgram } from './todo/manifest'
 
 class MiniProgramRegistry {
   private programs = new Map<string, MiniProgramDefinition>()
@@ -27,3 +28,4 @@ export const miniProgramRegistry = new MiniProgramRegistry()
 
 // Register built-in mini programs
 miniProgramRegistry.register(stockTrackerProgram)
+miniProgramRegistry.register(todoProgram)

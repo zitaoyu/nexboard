@@ -5,14 +5,13 @@ import { miniProgramRegistry } from '@/mini-programs/registry'
 import { DashboardGrid } from './DashboardGrid'
 import { MiniProgramsPage } from './MiniProgramsPage'
 import { SettingsPanel } from '../settings/SettingsPanel'
-import { ArrowLeft, Settings, Minus, X } from 'lucide-react'
+import { ArrowLeft, Minus, X } from 'lucide-react'
 
 export function AppShell(): React.ReactElement {
   const activeProgramId = useMiniProgramStore((s) => s.activeProgramId)
   const closeProgram = useMiniProgramStore((s) => s.closeProgram)
   const showLauncher = useMiniProgramStore((s) => s.showLauncher)
   const closeLauncher = useMiniProgramStore((s) => s.closeLauncher)
-  const toggleSettings = useSettingsStore((s) => s.toggleSettings)
   const settingsOpen = useSettingsStore((s) => s.settingsOpen)
   const dashboardBackgroundOpacity = useSettingsStore((s) => s.dashboardBackgroundOpacity)
   const uiScale = useSettingsStore((s) => s.uiScale)
@@ -70,13 +69,6 @@ export function AppShell(): React.ReactElement {
             className="flex items-center gap-1"
             style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}
           >
-            <button
-              onClick={toggleSettings}
-              className="rounded-md p-1.5 text-white/50 transition-colors hover:bg-white/10 hover:text-white"
-              title="Settings"
-            >
-              <Settings size={15} />
-            </button>
             <button
               onClick={handleMinimize}
               className="rounded-md p-1.5 text-white/50 transition-colors hover:bg-white/10 hover:text-white"

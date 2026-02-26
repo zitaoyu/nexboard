@@ -5,7 +5,9 @@ const api = {
   getPlatform: (): Promise<{ platform: string; version: string }> =>
     ipcRenderer.invoke('platform:get'),
   httpGet: (url: string): Promise<unknown> =>
-    ipcRenderer.invoke('http:get', url)
+    ipcRenderer.invoke('http:get', url),
+  setKiosk: (enabled: boolean): void =>
+    ipcRenderer.send('window:set-kiosk', enabled)
 }
 
 if (process.contextIsolated) {
@@ -16,8 +18,8 @@ if (process.contextIsolated) {
     console.error(error)
   }
 } else {
-  // @ts-ignore
+  // @ts-expect-error: window.electron is declared in preload/index.d.ts
   window.electron = electronAPI
-  // @ts-ignore
+  // @ts-expect-error: window.api is declared in preload/index.d.ts
   window.api = api
 }

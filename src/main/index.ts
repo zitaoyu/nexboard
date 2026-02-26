@@ -43,7 +43,7 @@ function createWindow(): void {
     resizable: true,
     minimizable: true,
     maximizable: false,
-    fullscreenable: false,
+    fullscreenable: true,
     minWidth: 320,
     minHeight: 400,
     webPreferences: {

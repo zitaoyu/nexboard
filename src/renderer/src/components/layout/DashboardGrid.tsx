@@ -1,20 +1,29 @@
-import { useMemo, useCallback } from 'react'
-import { Responsive, WidthProvider } from 'react-grid-layout'
-import { Grid3X3 } from 'lucide-react'
-import { useDashboardStore } from '@/stores/dashboard-store'
-import { useMiniProgramStore } from '@/stores/mini-program-store'
-import { widgetRegistry } from '@/widgets/registry'
-import { WidgetContainer } from './WidgetContainer'
-import { AddWidgetButton } from './AddWidgetButton'
-import type { LayoutItem } from '@/types/layout'
-import 'react-grid-layout/css/styles.css'
+import { useMemo, useCallback, useState } from "react";
+import { Responsive, WidthProvider } from "react-grid-layout";
+import { Grid3X3, Maximize2, Minimize2, Settings } from "lucide-react";
+import { useDashboardStore } from "@/stores/dashboard-store";
+import { useMiniProgramStore } from "@/stores/mini-program-store";
+import { useSettingsStore } from "@/stores/settings-store";
+import { widgetRegistry } from "@/widgets/registry";
+import { WidgetContainer } from "./WidgetContainer";
+import { AddWidgetButton } from "./AddWidgetButton";
+import type { LayoutItem } from "@/types/layout";
+import "react-grid-layout/css/styles.css";
 
-const ResponsiveGridLayout = WidthProvider(Responsive)
+const ResponsiveGridLayout = WidthProvider(Responsive);
 
 export function DashboardGrid(): React.ReactElement {
-  const widgets = useDashboardStore((s) => s.widgets)
-  const updateLayout = useDashboardStore((s) => s.updateLayout)
-  const openLauncher = useMiniProgramStore((s) => s.openLauncher)
+  const widgets = useDashboardStore((s) => s.widgets);
+  const updateLayout = useDashboardStore((s) => s.updateLayout);
+  const openLauncher = useMiniProgramStore((s) => s.openLauncher);
+  const toggleSettings = useSettingsStore((s) => s.toggleSettings);
+  const [isKiosk, setIsKiosk] = useState(false);
+
+  const toggleKiosk = useCallback(() => {
+    const next = !isKiosk;
+    setIsKiosk(next);
+    window.api.setKiosk(next);
+  }, [isKiosk]);
 
   const layouts = useMemo(() => {
     return widgets.map((w) => ({
@@ -26,16 +35,16 @@ export function DashboardGrid(): React.ReactElement {
       minW: widgetRegistry.get(w.widgetId)?.manifest.minSize?.w,
       minH: widgetRegistry.get(w.widgetId)?.manifest.minSize?.h,
       maxW: widgetRegistry.get(w.widgetId)?.manifest.maxSize?.w,
-      maxH: widgetRegistry.get(w.widgetId)?.manifest.maxSize?.h
-    }))
-  }, [widgets])
+      maxH: widgetRegistry.get(w.widgetId)?.manifest.maxSize?.h,
+    }));
+  }, [widgets]);
 
   const onLayoutChange = useCallback(
     (layout: LayoutItem[]) => {
-      updateLayout(layout)
+      updateLayout(layout);
     },
-    [updateLayout]
-  )
+    [updateLayout],
+  );
 
   return (
     <div className="group relative h-full w-full overflow-auto p-3">
@@ -47,7 +56,7 @@ export function DashboardGrid(): React.ReactElement {
         rowHeight={70}
         onLayoutChange={onLayoutChange}
         draggableHandle=".widget-drag-handle"
-        resizeHandles={['se', 'sw', 'ne', 'nw']}
+        resizeHandles={["se", "sw", "ne", "nw"]}
         containerPadding={[0, 0]}
         margin={[8, 8]}
       >
@@ -58,6 +67,25 @@ export function DashboardGrid(): React.ReactElement {
         ))}
       </ResponsiveGridLayout>
 
+      {/* Kiosk — far left */}
+      <button
+        onClick={toggleKiosk}
+        className={`absolute bottom-4 left-4 z-40 rounded-full bg-white/10 p-3 shadow-lg transition-all hover:bg-white/20 ${isKiosk ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}
+        title={isKiosk ? "Exit Kiosk Mode" : "Enter Kiosk Mode"}
+      >
+        {isKiosk ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+      </button>
+
+      {/* Settings — third from right */}
+      <button
+        onClick={toggleSettings}
+        className="absolute bottom-4 right-28 z-40 rounded-full bg-white/10 p-3 shadow-lg transition-all opacity-0 hover:bg-white/20 group-hover:opacity-100"
+        title="Settings"
+      >
+        <Settings size={20} />
+      </button>
+
+      {/* Mini Programs — second from right */}
       <button
         onClick={openLauncher}
         className="absolute bottom-4 right-16 z-40 rounded-full bg-white/10 p-3 shadow-lg transition-all opacity-0 hover:bg-white/20 group-hover:opacity-100"
@@ -65,7 +93,9 @@ export function DashboardGrid(): React.ReactElement {
       >
         <Grid3X3 size={20} />
       </button>
+
+      {/* Add Widget — rightmost */}
       <AddWidgetButton />
     </div>
-  )
+  );
 }
