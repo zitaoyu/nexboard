@@ -6,13 +6,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 npm run dev          # Start Electron app with hot reload
+npm run dev:clean    # Start with wiped userData (fresh state)
 npm run build        # Compile source only (outputs to out/) — does NOT produce an installer
-npm run package      # Full build + electron-builder → produces installer in dist/
+npm run package      # Full release build: typecheck → lint → test → electron-builder installer in dist/
 npm run typecheck    # TypeScript type checking (both main and renderer)
-npm run lint         # ESLint with auto-fix
+npm run lint         # ESLint (report only)
+npm run lint:fix     # ESLint with auto-fix
+npm run test         # Run unit tests once (Vitest)
+npm run test:watch   # Run tests in watch mode
 ```
 
-There are no automated tests. Verification is done by running `npm run dev` and testing manually.
+## Testing
+
+108 unit tests live in `src/**/__tests__/` directories, co-located with the source they cover:
+
+- `stores/__tests__/` — all three Zustand stores (dashboard, mini-program, settings)
+- `widgets/__tests__/` — widget registry
+- `mini-programs/__tests__/` — mini-program registry + widget auto-forwarding
+- `mini-programs/todo/__tests__/` — todo store
+
+The `prepackage` npm lifecycle hook runs `typecheck && lint && test` automatically before every `npm run package`, so the suite gates every release build.
+
+When adding a new store or registry, create a matching `__tests__/` file. Use `store.setState({ ...data })` (merge, not replace) to reset state in `beforeEach`.
 
 ## Task tracking
 
@@ -22,7 +37,7 @@ Pending and completed features are tracked in `TODOs.txt` at the repo root. When
 
 NexBoard is an Electron desktop app. The codebase follows the standard Electron three-process model:
 
-- **`src/main/`** — Node.js process. Owns the `BrowserWindow`, tray icon, and native OS integration. `desktop-mode.ts` uses `setAlwaysOnTop(true, 'normal', -100)` plus a blur-event handler to keep the window permanently below all other windows.
+- **`src/main/`** — Node.js process. Owns the `BrowserWindow`, tray icon, and native OS integration. `desktop-mode.ts` contains stub exports (desktop mode currently disabled).
 - **`src/preload/`** — Context bridge. Exposes `window.electron` (from `@electron-toolkit/preload`) and `window.api` to the renderer. Any new main↔renderer communication must be declared here and in `index.d.ts`.
 - **`src/renderer/src/`** — React 18 app with TailwindCSS v4. The `@/` alias maps to this directory.
 
@@ -51,8 +66,8 @@ Three Zustand stores, all persisted to `localStorage`:
 | Store | Key | What it holds |
 |-------|-----|---------------|
 | `dashboard-store` | `nexboard-dashboard` | `WidgetInstance[]` — the placed widgets and their grid positions |
-| `mini-program-store` | *(not persisted)* | `activeProgramId` — which mini program is open |
-| `settings-store` | `nexboard-settings` | `finnhubApiKey` |
+| `mini-program-store` | *(not persisted)* | `activeProgramId`, `showLauncher` |
+| `settings-store` | `nexboard-settings` | `widgetBackgroundOpacity`, `dashboardBackgroundOpacity`, `uiScale` |
 
 `WidgetInstance.config` is a free-form `Record<string, unknown>` — widget components read/write their own config keys, merged via `updateWidgetConfig`.
 

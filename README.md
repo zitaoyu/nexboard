@@ -4,8 +4,8 @@ A customizable desktop dashboard app with widgets and mini programs. The app win
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) >= 18
-- npm >= 9
+- [Node.js](https://nodejs.org/) >= 22
+- npm >= 10
 
 ## Getting Started
 
@@ -24,11 +24,15 @@ The app will open as a small window in the top-right corner of your screen.
 | Command | Description |
 |---------|-------------|
 | `npm run dev` | Start dev server with hot reload |
+| `npm run dev:clean` | Start with wiped userData (fresh layout and settings) |
 | `npm run build` | Compile source only (outputs to `out/`) |
-| `npm run package` | Build + package into an installer (outputs to `dist/`) |
+| `npm run package` | Full release: typecheck → lint → test → installer in `dist/` |
 | `npm run preview` | Preview the production build |
-| `npm run typecheck` | Run TypeScript type checking |
-| `npm run lint` | Lint and auto-fix with ESLint |
+| `npm run typecheck` | TypeScript type checking (main + renderer) |
+| `npm run lint` | ESLint — report only |
+| `npm run lint:fix` | ESLint — auto-fix |
+| `npm run test` | Run unit tests once (108 tests, Vitest) |
+| `npm run test:watch` | Run tests in watch mode |
 
 ## Project Structure
 
@@ -57,7 +61,7 @@ src/
         ├── stores/                # Zustand state stores (persisted to localStorage)
         │   ├── dashboard-store.ts # Widget instances and grid layout
         │   ├── mini-program-store.ts # Active mini program navigation
-        │   └── settings-store.ts  # User settings (API keys)
+        │   └── settings-store.ts  # User settings (opacity, scale)
         │
         ├── components/
         │   ├── layout/
@@ -76,11 +80,17 @@ src/
         │
         └── mini-programs/         # Built-in mini programs
             ├── registry.ts        # Global mini program registry
-            └── stock-tracker/     # Stock price tracker (Finnhub API)
-                ├── api/           # API client
-                ├── hooks/         # React Query hooks
-                ├── components/    # UI components
-                └── widgets/       # Dashboard widgets provided by this program
+            ├── stock-tracker/     # Stock price tracker (Yahoo Finance)
+            │   ├── api/           # API client
+            │   ├── hooks/         # React Query hooks
+            │   ├── components/    # UI components
+            │   └── widgets/       # Dashboard widgets provided by this program
+            └── todo/              # Todo list manager
+                ├── store.ts       # Zustand store (persisted)
+                ├── components/    # AddTodoForm, TodoItem
+                ├── widgets/       # Todo Summary dashboard widget
+                ├── manifest.ts    # MiniProgramDefinition export
+                └── __tests__/     # Unit tests
 ```
 
 ## Architecture
@@ -123,9 +133,9 @@ To add a new mini program:
 
 When a mini program is registered, its widgets are automatically added to the global widget registry with namespaced IDs (e.g. `stock-tracker:ticker`).
 
-### Desktop Mode
+### Always-on-Bottom
 
-The app window always stays behind other windows using `setAlwaysOnTop(true, 'normal', -100)`. A blur handler re-asserts this z-level whenever focus moves away. This works on both Windows and macOS.
+The app window stays behind all other windows. Desktop mode integration is handled in `src/main/desktop-mode.ts`.
 
 ## Tech Stack
 
@@ -139,10 +149,16 @@ The app window always stays behind other windows using `setAlwaysOnTop(true, 'no
 | Charts | Recharts |
 | Icons | lucide-react |
 
-## Stock Tracker Setup
+## Stock Tracker
 
-The stock tracker mini program uses the [Finnhub](https://finnhub.io/) API. To use it:
+The stock tracker uses the [Yahoo Finance](https://finance.yahoo.com/) public API — no API key required. Stock data refreshes automatically every 60 seconds during market hours and every 5 minutes otherwise.
 
-1. Create a free account at [finnhub.io](https://finnhub.io/)
-2. Copy your API key
-3. Open NexBoard settings (gear icon) and paste the key
+## Quality Gates
+
+Every `npm run package` run automatically executes:
+
+```
+typecheck  →  lint  →  test (108 unit tests)  →  build  →  installer
+```
+
+The installer in `dist/` is only produced when all checks pass. Run `npm run test` independently at any time to check the test suite.

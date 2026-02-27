@@ -54,3 +54,4 @@
 [x] Default widgets on first install -- Clock, Timer, Stock pre-populated in dashboard-store DEFAULT_WIDGETS
 [x] Timer milliseconds -- state changed to ms, 10ms interval, formatTime shows MM:SS.cs
 [x] Fix Timer countdown ring overlapping buttons -- replaced SVG circle ring with a flat progress bar (blue→amber→red color shift as time runs out, glow effect)
+[x] Automated unit tests -- vitest + jsdom; 108 tests across 6 files covering all Zustand stores, widget registry, mini-program registry, todo store; runs as prepackage gate via npm lifecycle
