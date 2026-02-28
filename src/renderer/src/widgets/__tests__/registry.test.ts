@@ -11,10 +11,15 @@ describe('widgetRegistry', () => {
       expect(widgetRegistry.get('built-in:timer')).toBeDefined()
     })
 
-    it('getAll includes both built-in widgets', () => {
+    it('contains built-in:photo', () => {
+      expect(widgetRegistry.get('built-in:photo')).toBeDefined()
+    })
+
+    it('getAll includes all three built-in widgets', () => {
       const ids = widgetRegistry.getAll().map((d) => d.manifest.id)
       expect(ids).toContain('built-in:clock')
       expect(ids).toContain('built-in:timer')
+      expect(ids).toContain('built-in:photo')
     })
   })
 

@@ -1,6 +1,7 @@
 import type { WidgetDefinition } from '@/types/widget'
 import { clockWidget } from './clock/manifest'
 import { timerWidget } from './timer/manifest'
+import { photoWidget } from './photo/manifest'
 
 class WidgetRegistry {
   private widgets = new Map<string, WidgetDefinition>()
@@ -23,3 +24,4 @@ export const widgetRegistry = new WidgetRegistry()
 // Register built-in widgets
 widgetRegistry.register(clockWidget)
 widgetRegistry.register(timerWidget)
+widgetRegistry.register(photoWidget)

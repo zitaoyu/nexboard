@@ -85,13 +85,18 @@ export function WidgetContainer({
     updateWidgetConfig(instanceId, config);
   };
 
+  const fullBleed = manifest.fullBleed && !showSettings;
+  const noBorder = manifest.noBorder && !showSettings;
+
   return (
     <div
-      className={`group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/10 backdrop-blur-md transition-all duration-300 ease-out ${mounted ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"}`}
-      style={{ backgroundColor: `rgba(0,0,0,${widgetBackgroundOpacity})` }}
+      className={`group relative flex h-full flex-col overflow-hidden rounded-xl transition-all duration-300 ease-out ${noBorder ? "" : "border border-white/10 backdrop-blur-md"} ${mounted ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"}`}
+      style={{ backgroundColor: noBorder ? "transparent" : `rgba(0,0,0,${widgetBackgroundOpacity})` }}
     >
-      {/* Title bar — visible on hover */}
-      <div className="flex shrink-0 items-center gap-1 px-2 py-1 opacity-0 transition-opacity group-hover:opacity-100">
+      {/* Title bar — floats over content in fullBleed mode, otherwise takes up space */}
+      <div
+        className={`flex items-center gap-1 px-2 py-1 opacity-0 transition-opacity group-hover:opacity-100 ${fullBleed ? "absolute inset-x-0 top-0 z-10" : "shrink-0"}`}
+      >
         {/* Drag handle — only this area initiates dragging */}
         <div className="widget-drag-handle flex min-w-0 flex-1 cursor-grab items-center gap-1">
           <GripHorizontal size={12} className="shrink-0 text-white/40" />
@@ -120,7 +125,7 @@ export function WidgetContainer({
       </div>
 
       {/* Widget content or settings — both zoomed 20% for readability */}
-      <div className="min-h-0 flex-1">
+      <div className={fullBleed ? "absolute inset-0" : "min-h-0 flex-1"}>
         <div style={{ zoom: 1.2 }} className="h-full">
           {showSettings && SettingsComponent ? (
             <SettingsComponent

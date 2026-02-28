@@ -18,6 +18,10 @@ export interface WidgetManifest {
   sourceProgram: string | null
   /** Icon name from lucide-react */
   icon?: string
+  /** When true, the widget content fills the full container and the title bar floats on top */
+  fullBleed?: boolean
+  /** When true, removes the border and background from the widget container */
+  noBorder?: boolean
 }
 
 /** Runtime state for a placed widget instance on the dashboard */
