@@ -14,6 +14,13 @@ if (process.env.NEXBOARD_CLEAN === '1') {
   console.log('[clean-dev] userData wiped and redirected to', cleanPath)
 }
 
+// ── Memory / performance tuning ──────────────────────────────────
+// Limit the renderer's JS heap to 128 MB (default is ~4 GB).
+app.commandLine.appendSwitch('js-flags', '--max-old-space-size=128')
+// Disable GPU compositing if not needed — saves a whole GPU process.
+// (NexBoard is a lightweight widget dashboard; no WebGL/Canvas required.)
+app.commandLine.appendSwitch('disable-gpu-compositing')
+
 let mainWindow: BrowserWindow | null = null
 let tray: Tray | null = null
 
@@ -50,7 +57,10 @@ function createWindow(): void {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
       contextIsolation: true,
-      nodeIntegration: false
+      nodeIntegration: false,
+      spellcheck: false,
+      enableWebSQL: false,
+      v8CacheOptions: 'bypassHeatCheck'
     }
   })
 

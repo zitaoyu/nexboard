@@ -54,3 +54,4 @@
 [x] Default widgets on first install -- Clock, Timer, Stock pre-populated in dashboard-store DEFAULT_WIDGETS
 [x] Timer milliseconds -- state changed to ms, 10ms interval, formatTime shows MM:SS.cs
 [x] Fix Timer countdown ring overlapping buttons -- replaced SVG circle ring with a flat progress bar (blue→amber→red color shift as time runs out, glow effect)
+[x] Optimize Electron memory usage -- JS heap cap 128 MB, disable GPU compositing, disable spellcheck/WebSQL, enable V8 bytecode cache
