@@ -15,6 +15,7 @@ interface DashboardState {
     config: Record<string, unknown>,
   ) => void;
   updateLayout: (layouts: LayoutItem[]) => void;
+  resetDashboard: () => void;
 }
 
 /** Shown on first install (no persisted state). Stable instanceIds prevent duplicates on re-mount. */
@@ -29,13 +30,13 @@ const DEFAULT_WIDGETS: WidgetInstance[] = [
     instanceId: "default-timer",
     widgetId: "built-in:timer",
     config: {},
-    layout: { x: 0, y: 2, w: 3, h: 2, minW: 2, minH: 2, maxW: 6, maxH: 4 },
+    layout: { x: 0, y: 2, w: 3, h: 3, minW: 2, minH: 3, maxW: 6, maxH: 4 },
   },
   {
     instanceId: "default-stock",
     widgetId: "stock-tracker:ticker",
     config: { symbols: ["MSFT"] },
-    layout: { x: 0, y: 4, w: 4, h: 4, minW: 2, minH: 2, maxW: 4, maxH: 12 },
+    layout: { x: 0, y: 5, w: 4, h: 4, minW: 2, minH: 2, maxW: 4, maxH: 12 },
   },
 ];
 
@@ -102,7 +103,21 @@ export const useDashboardStore = create<DashboardState>()(
           }),
         }));
       },
+
+      resetDashboard: (): void => {
+        set({ widgets: DEFAULT_WIDGETS });
+      },
     }),
-    { name: "nexboard-dashboard" },
+    {
+      name: "nexboard-dashboard",
+      merge: (persistedState, currentState) => {
+        const p = persistedState as Partial<DashboardState>;
+        return {
+          ...currentState,
+          ...p,
+          widgets: p?.widgets?.length ? p.widgets : DEFAULT_WIDGETS,
+        };
+      },
+    },
   ),
 );

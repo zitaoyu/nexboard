@@ -1,4 +1,4 @@
-import { app, shell, screen, BrowserWindow, Tray, Menu, nativeImage } from 'electron'
+import { app, shell, screen, ipcMain, BrowserWindow, Tray, Menu, nativeImage } from 'electron'
 import { join } from 'path'
 import { rmSync } from 'fs'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -16,19 +16,20 @@ if (process.env.NEXBOARD_CLEAN === '1') {
 
 let mainWindow: BrowserWindow | null = null
 let tray: Tray | null = null
+let saveTimer: ReturnType<typeof setTimeout> | null = null
 
 const WINDOW_WIDTH = 400
-const WINDOW_HEIGHT = 700
+const WINDOW_MARGIN = 16
 
 function createWindow(): void {
   // Position in the top-right corner of the screen (used as default)
   const primaryDisplay = screen.getPrimaryDisplay()
-  const { width: screenWidth } = primaryDisplay.workAreaSize
+  const { width: screenWidth, height: screenHeight } = primaryDisplay.workAreaSize
   const defaultBounds = {
-    x: screenWidth - WINDOW_WIDTH - 16,
-    y: 16,
+    x: screenWidth - WINDOW_WIDTH - WINDOW_MARGIN,
+    y: WINDOW_MARGIN,
     width: WINDOW_WIDTH,
-    height: WINDOW_HEIGHT
+    height: screenHeight - WINDOW_MARGIN * 2
   }
 
   const bounds = loadWindowBounds(defaultBounds)
@@ -59,7 +60,6 @@ function createWindow(): void {
   })
 
   // Persist window bounds when the user moves or resizes the window
-  let saveTimer: ReturnType<typeof setTimeout> | null = null
   const scheduleSave = (): void => {
     if (saveTimer) clearTimeout(saveTimer)
     saveTimer = setTimeout(() => {
@@ -126,6 +126,16 @@ app.whenReady().then(() => {
   registerIpcHandlers()
   createWindow()
   createTray()
+
+  ipcMain.on('window:reset-bounds', () => {
+    if (!mainWindow || mainWindow.isDestroyed()) return
+    const { width: screenWidth, height: screenHeight } = screen.getPrimaryDisplay().workAreaSize
+    const defaultBounds = { x: screenWidth - WINDOW_WIDTH - WINDOW_MARGIN, y: WINDOW_MARGIN, width: WINDOW_WIDTH, height: screenHeight - WINDOW_MARGIN * 2 }
+    if (saveTimer) clearTimeout(saveTimer)
+    saveTimer = null
+    mainWindow.setBounds(defaultBounds)
+    saveWindowBounds(defaultBounds)
+  })
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {

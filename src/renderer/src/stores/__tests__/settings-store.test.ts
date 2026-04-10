@@ -86,6 +86,32 @@ describe('settings-store', () => {
     })
   })
 
+  describe('resetSettings', () => {
+    it('restores default widgetBackgroundOpacity after change', () => {
+      useSettingsStore.getState().setWidgetBackgroundOpacity(0.1)
+      useSettingsStore.getState().resetSettings()
+      expect(useSettingsStore.getState().widgetBackgroundOpacity).toBe(0.6)
+    })
+
+    it('restores default dashboardBackgroundOpacity after change', () => {
+      useSettingsStore.getState().setDashboardBackgroundOpacity(0.9)
+      useSettingsStore.getState().resetSettings()
+      expect(useSettingsStore.getState().dashboardBackgroundOpacity).toBe(0.2)
+    })
+
+    it('restores default uiScale after change', () => {
+      useSettingsStore.getState().setUiScale(1.5)
+      useSettingsStore.getState().resetSettings()
+      expect(useSettingsStore.getState().uiScale).toBe(1.0)
+    })
+
+    it('closes the settings panel (sets settingsOpen to false)', () => {
+      useSettingsStore.setState({ settingsOpen: true })
+      useSettingsStore.getState().resetSettings()
+      expect(useSettingsStore.getState().settingsOpen).toBe(false)
+    })
+  })
+
   describe('toggleSettings', () => {
     it('sets settingsOpen to true when false', () => {
       useSettingsStore.getState().toggleSettings()

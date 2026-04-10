@@ -7,8 +7,8 @@ export const timerWidget: WidgetDefinition = {
     id: 'built-in:timer',
     name: 'Timer',
     description: 'Countdown timer and stopwatch',
-    defaultSize: { w: 3, h: 2 },
-    minSize: { w: 2, h: 2 },
+    defaultSize: { w: 3, h: 3 },
+    minSize: { w: 2, h: 3 },
     maxSize: { w: 6, h: 4 },
     sourceProgram: null,
     icon: 'Timer'

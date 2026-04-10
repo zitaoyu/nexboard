@@ -151,6 +151,34 @@ describe('dashboard-store', () => {
     })
   })
 
+  describe('resetDashboard', () => {
+    it('restores DEFAULT_WIDGETS after widgets are cleared', () => {
+      useDashboardStore.setState({ widgets: [] })
+      useDashboardStore.getState().resetDashboard()
+      const widgets = useDashboardStore.getState().widgets
+      expect(widgets.length).toBeGreaterThan(0)
+      expect(widgets[0].instanceId).toBe('default-clock')
+    })
+
+    it('restores DEFAULT_WIDGETS after widgets are modified', () => {
+      useDashboardStore.getState().addWidget('built-in:clock')
+      useDashboardStore.getState().resetDashboard()
+      const ids = useDashboardStore.getState().widgets.map((w) => w.instanceId)
+      expect(ids).toContain('default-clock')
+      expect(ids).toContain('default-timer')
+      expect(ids).toContain('default-stock')
+    })
+
+    it('default layout has clock → timer → stock order (ascending y)', () => {
+      useDashboardStore.getState().resetDashboard()
+      const widgets = useDashboardStore.getState().widgets
+      const byY = [...widgets].sort((a, b) => a.layout.y - b.layout.y)
+      expect(byY[0].widgetId).toBe('built-in:clock')
+      expect(byY[1].widgetId).toBe('built-in:timer')
+      expect(byY[2].widgetId).toBe('stock-tracker:ticker')
+    })
+  })
+
   describe('updateLayout', () => {
     it('updates x, y, w, h for a matching widget', () => {
       useDashboardStore.setState({

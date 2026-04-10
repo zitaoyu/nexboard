@@ -56,4 +56,5 @@ export function registerIpcHandlers(): void {
     const mime = IMAGE_MIME[extname(filePath).toLowerCase()] ?? 'application/octet-stream'
     return `data:${mime};base64,${buf.toString('base64')}`
   })
+
 }

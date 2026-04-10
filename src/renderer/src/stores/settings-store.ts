@@ -15,6 +15,7 @@ interface SettingsState {
   setDashboardBackgroundOpacity: (opacity: number) => void
   setUiScale: (scale: number) => void
   toggleSettings: () => void
+  resetSettings: () => void
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -28,7 +29,8 @@ export const useSettingsStore = create<SettingsState>()(
       setWidgetBackgroundOpacity: (opacity) => { set({ widgetBackgroundOpacity: opacity }) },
       setDashboardBackgroundOpacity: (opacity) => { set({ dashboardBackgroundOpacity: opacity }) },
       setUiScale: (scale) => { set({ uiScale: scale }) },
-      toggleSettings: () => { set((state) => ({ settingsOpen: !state.settingsOpen })) }
+      toggleSettings: () => { set((state) => ({ settingsOpen: !state.settingsOpen })) },
+      resetSettings: () => { set({ widgetBackgroundOpacity: 0.6, dashboardBackgroundOpacity: 0.2, uiScale: 1.0, settingsOpen: false }) }
     }),
     {
       name: 'nexboard-settings',

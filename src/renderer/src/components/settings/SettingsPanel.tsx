@@ -1,9 +1,13 @@
+import { useState } from 'react'
 import { X } from 'lucide-react'
 import { useSettingsStore } from '@/stores/settings-store'
+import { useDashboardStore } from '@/stores/dashboard-store'
 
 export function SettingsPanel(): React.ReactElement {
-  const { widgetBackgroundOpacity, setWidgetBackgroundOpacity, dashboardBackgroundOpacity, setDashboardBackgroundOpacity, uiScale, setUiScale, toggleSettings } =
+  const { widgetBackgroundOpacity, setWidgetBackgroundOpacity, dashboardBackgroundOpacity, setDashboardBackgroundOpacity, uiScale, setUiScale, toggleSettings, resetSettings } =
     useSettingsStore()
+  const resetDashboard = useDashboardStore((s) => s.resetDashboard)
+  const [confirming, setConfirming] = useState(false)
 
   return (
     <div
@@ -75,6 +79,29 @@ export function SettingsPanel(): React.ReactElement {
               className="mt-1 w-full accent-blue-500"
             />
           </div>
+          {confirming ? (
+            <div className="mt-2 flex gap-2">
+              <button
+                onClick={() => { resetDashboard(); resetSettings(); window.api.resetWindowBounds(); setConfirming(false) }}
+                className="flex-1 rounded-lg bg-red-500/20 py-1.5 text-sm text-red-400 hover:bg-red-500/30 hover:text-red-300"
+              >
+                Confirm Reset
+              </button>
+              <button
+                onClick={() => setConfirming(false)}
+                className="flex-1 rounded-lg border border-white/10 py-1.5 text-sm text-white/50 hover:bg-white/10 hover:text-white"
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setConfirming(true)}
+              className="mt-2 w-full rounded-lg border border-white/10 py-1.5 text-sm text-white/50 hover:bg-white/10 hover:text-white"
+            >
+              Reset to Defaults
+            </button>
+          )}
         </div>
       </div>
     </div>

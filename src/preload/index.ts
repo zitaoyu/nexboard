@@ -12,6 +12,8 @@ const api = {
     ipcRenderer.invoke('dialog:pick-photos'),
   readFileAsDataUrl: (filePath: string): Promise<string> =>
     ipcRenderer.invoke('files:read-as-data-url', filePath),
+  resetWindowBounds: (): void =>
+    ipcRenderer.send('window:reset-bounds'),
 }
 
 if (process.contextIsolated) {

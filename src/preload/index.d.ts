@@ -6,6 +6,7 @@ interface NexBoardAPI {
   setKiosk(enabled: boolean): void
   pickPhotos(): Promise<string[]>
   readFileAsDataUrl(filePath: string): Promise<string>
+  resetWindowBounds(): void
 }
 
 declare global {
