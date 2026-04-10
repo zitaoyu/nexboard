@@ -4,7 +4,7 @@ directories:
   buildResources: build
 publish:
   provider: github
-  releaseType: release
+  releaseType: draft
 files:
   - '!**/.vscode/*'
   - '!src/*'
