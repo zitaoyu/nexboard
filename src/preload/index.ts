@@ -4,8 +4,8 @@ import { electronAPI } from '@electron-toolkit/preload'
 const api = {
   getPlatform: (): Promise<{ platform: string; version: string }> =>
     ipcRenderer.invoke('platform:get'),
-  httpGet: (url: string): Promise<unknown> =>
-    ipcRenderer.invoke('http:get', url),
+  httpGet: (url: string, headers?: Record<string, string>): Promise<unknown> =>
+    ipcRenderer.invoke('http:get', url, headers),
   setKiosk: (enabled: boolean): void =>
     ipcRenderer.send('window:set-kiosk', enabled),
   pickPhotos: (): Promise<string[]> =>

@@ -43,21 +43,23 @@ export function StockQuoteCard({
       onClick={onSelect}
       className={`w-full rounded-xl bg-white/5 text-left transition-colors hover:bg-white/10 ${compact ? 'p-2' : 'p-3'}`}
     >
-      <div className="flex items-center justify-between">
+      <div className="flex items-center">
         <span className={`font-medium ${compact ? 'text-xs' : 'text-sm'}`}>{symbol}</span>
-        {isPositive ? (
-          <TrendingUp size={compact ? 12 : 14} className="text-green-400" />
-        ) : (
-          <TrendingDown size={compact ? 12 : 14} className="text-red-400" />
-        )}
       </div>
       <div className={`mt-1 font-semibold ${compact ? 'text-sm' : 'text-xl'}`}>
         ${quote.c.toFixed(2)}
       </div>
-      <div className={`text-xs ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
-        {isPositive ? '+' : ''}
-        {quote.d.toFixed(2)} ({isPositive ? '+' : ''}
-        {quote.dp.toFixed(2)}%)
+      <div className={`mt-1 flex items-center gap-1.5 ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
+        {isPositive ? (
+          <TrendingUp size={compact ? 12 : 18} />
+        ) : (
+          <TrendingDown size={compact ? 12 : 18} />
+        )}
+        <span className="text-xs">
+          {isPositive ? '+' : ''}
+          {quote.d.toFixed(2)} ({isPositive ? '+' : ''}
+          {quote.dp.toFixed(2)}%)
+        </span>
       </div>
 
       {compact && chartData.length > 1 && (

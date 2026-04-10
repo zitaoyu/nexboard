@@ -79,7 +79,7 @@ export function DashboardGrid(): React.ReactElement {
       {/* Settings — third from right */}
       <button
         onClick={toggleSettings}
-        className="absolute bottom-4 right-28 z-40 rounded-full bg-white/10 p-3 shadow-lg transition-all opacity-0 hover:bg-white/20 group-hover:opacity-100"
+        className="absolute bottom-4 right-36 z-40 rounded-full bg-white/10 p-3 shadow-lg transition-all opacity-0 hover:bg-white/20 group-hover:opacity-100"
         title="Settings"
       >
         <Settings size={20} />
@@ -88,7 +88,7 @@ export function DashboardGrid(): React.ReactElement {
       {/* Mini Programs — second from right */}
       <button
         onClick={openLauncher}
-        className="absolute bottom-4 right-16 z-40 rounded-full bg-white/10 p-3 shadow-lg transition-all opacity-0 hover:bg-white/20 group-hover:opacity-100"
+        className="absolute bottom-4 right-20 z-40 rounded-full bg-white/10 p-3 shadow-lg transition-all opacity-0 hover:bg-white/20 group-hover:opacity-100"
         title="Mini Programs"
       >
         <Grid3X3 size={20} />

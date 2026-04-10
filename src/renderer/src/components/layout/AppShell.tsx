@@ -43,9 +43,9 @@ export function AppShell(): React.ReactElement {
       ? 'Mini Programs'
       : 'NexBoard'
 
-  // Boost background opacity to at least 30% in subviews for readability
+  // Boost background opacity to at least 80% in subviews for readability
   const effectiveBgOpacity = isSubView
-    ? Math.max(dashboardBackgroundOpacity, 0.3)
+    ? Math.max(dashboardBackgroundOpacity, 0.9)
     : dashboardBackgroundOpacity
 
   return (
@@ -107,10 +107,10 @@ export function AppShell(): React.ReactElement {
           >
             <button
               onClick={handleBack}
-              className="flex items-center gap-1 rounded-md bg-white/10 px-2.5 py-1.5 text-xs transition-colors hover:bg-white/20"
+              className="flex items-center gap-2 rounded-md bg-white/10 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/20"
               title="Back to dashboard"
             >
-              <ArrowLeft size={13} />
+              <ArrowLeft size={16} />
               Back
             </button>
           </div>

@@ -33,8 +33,8 @@ export function registerIpcHandlers(): void {
     win?.setFullScreen(enabled)
   })
 
-  ipcMain.handle('http:get', async (_event, url: string) => {
-    const res = await net.fetch(url)
+  ipcMain.handle('http:get', async (_event, url: string, headers?: Record<string, string>) => {
+    const res = await net.fetch(url, headers ? { headers } : undefined)
     if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`)
     return res.json()
   })

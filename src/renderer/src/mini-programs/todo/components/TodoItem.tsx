@@ -61,7 +61,7 @@ export function TodoItem({ item, onToggle, onRemove, onUpdate }: Props): React.R
 
   if (editing) {
     return (
-      <div className="flex flex-col gap-2 rounded-lg border border-white/10 bg-white/5 px-2 py-2">
+      <div className="flex flex-col gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-3">
         {/* Text input */}
         <input
           type="text"
@@ -72,26 +72,26 @@ export function TodoItem({ item, onToggle, onRemove, onUpdate }: Props): React.R
             if (e.key === 'Escape') cancelEdit()
           }}
           autoFocus
-          className="w-full bg-transparent text-sm text-white outline-none"
+          className="w-full bg-transparent text-base text-white outline-none"
         />
 
         {/* Due date + priority */}
         <div className="flex gap-2">
-          <label className="flex flex-1 flex-col gap-1">
-            <span className="text-xs text-white/40">Due date</span>
+          <label className="flex flex-1 flex-col gap-1.5">
+            <span className="text-sm text-white/40">Due date</span>
             <input
               type="date"
               value={editDueDate}
               onChange={(e) => setEditDueDate(e.target.value)}
-              className="rounded bg-white/10 px-2 py-1 text-sm text-white outline-none [color-scheme:dark]"
+              className="rounded bg-white/10 px-2 py-1.5 text-base text-white outline-none [color-scheme:dark]"
             />
           </label>
-          <label className="flex flex-col gap-1">
-            <span className="text-xs text-white/40">Priority</span>
+          <label className="flex flex-col gap-1.5">
+            <span className="text-sm text-white/40">Priority</span>
             <select
               value={editPriority}
               onChange={(e) => setEditPriority(e.target.value as Priority | '')}
-              className="rounded bg-gray-800 px-2 py-1 text-sm text-white outline-none"
+              className="rounded bg-gray-800 px-2 py-1.5 text-base text-white outline-none"
             >
               <option value="" className="bg-gray-800 text-white">None</option>
               <option value="low" className="bg-gray-800 text-white">Low</option>
@@ -102,19 +102,19 @@ export function TodoItem({ item, onToggle, onRemove, onUpdate }: Props): React.R
         </div>
 
         {/* Save / Cancel */}
-        <div className="flex justify-end gap-1">
+        <div className="flex justify-end gap-1.5">
           <button
             onClick={cancelEdit}
-            className="rounded px-2 py-1 text-xs text-white/40 transition-colors hover:bg-white/10 hover:text-white"
+            className="rounded px-2.5 py-1.5 text-sm text-white/40 transition-colors hover:bg-white/10 hover:text-white"
           >
-            <X size={13} />
+            <X size={15} />
           </button>
           <button
             onClick={saveEdit}
             disabled={!editText.trim()}
-            className="flex items-center gap-1 rounded bg-purple-600 px-2 py-1 text-xs text-white transition-colors hover:bg-purple-500 disabled:opacity-30"
+            className="flex items-center gap-1 rounded bg-purple-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-purple-500 disabled:opacity-30"
           >
-            <Check size={13} /> Save
+            <Check size={15} /> Save
           </button>
         </div>
       </div>
@@ -122,11 +122,11 @@ export function TodoItem({ item, onToggle, onRemove, onUpdate }: Props): React.R
   }
 
   return (
-    <div className="group flex items-start gap-2 rounded-lg px-2 py-2 transition-colors hover:bg-white/5">
+    <div className="group flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-white/5">
       {/* Checkbox */}
       <button
         onClick={onToggle}
-        className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border transition-colors ${
+        className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded border transition-colors ${
           item.completed
             ? 'border-purple-500 bg-purple-500'
             : 'border-white/30 hover:border-purple-400'
@@ -134,7 +134,7 @@ export function TodoItem({ item, onToggle, onRemove, onUpdate }: Props): React.R
         aria-label={item.completed ? 'Mark incomplete' : 'Mark complete'}
       >
         {item.completed && (
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <svg width="12" height="12" viewBox="0 0 10 10" fill="none">
             <path d="M2 5l2.5 2.5L8 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         )}
@@ -143,22 +143,22 @@ export function TodoItem({ item, onToggle, onRemove, onUpdate }: Props): React.R
       {/* Content */}
       <div className="min-w-0 flex-1">
         <span
-          className={`block text-sm leading-snug ${item.completed ? 'text-white/30 line-through' : 'text-white/90'}`}
+          className={`block text-base leading-snug ${item.completed ? 'text-white/30 line-through' : 'text-white/90'}`}
         >
           {item.text}
         </span>
 
         {/* Badges */}
         {(due || item.priority) && (
-          <div className="mt-1 flex flex-wrap gap-1">
+          <div className="mt-1.5 flex flex-wrap gap-1.5">
             {due && (
-              <span className={`rounded px-2 py-0.5 text-xs font-medium ${due.className}`}>
+              <span className={`rounded px-2.5 py-0.5 text-sm font-medium ${due.className}`}>
                 {due.label}
               </span>
             )}
             {item.priority && (
               <span
-                className={`rounded px-2 py-0.5 text-xs font-medium capitalize ${PRIORITY_STYLES[item.priority]}`}
+                className={`rounded px-2.5 py-0.5 text-sm font-medium capitalize ${PRIORITY_STYLES[item.priority]}`}
               >
                 {item.priority}
               </span>
@@ -168,20 +168,20 @@ export function TodoItem({ item, onToggle, onRemove, onUpdate }: Props): React.R
       </div>
 
       {/* Edit + Delete (visible on hover) */}
-      <div className="mt-0.5 flex shrink-0 gap-0.5 text-white/0 transition-colors group-hover:text-white/30">
+      <div className="mt-0.5 flex shrink-0 gap-1 text-white/0 transition-colors group-hover:text-white/30">
         <button
           onClick={startEdit}
-          className="rounded p-0.5 transition-colors hover:!text-white/70"
+          className="rounded p-1 transition-colors hover:!text-white/70"
           aria-label="Edit task"
         >
-          <Pencil size={13} />
+          <Pencil size={15} />
         </button>
         <button
           onClick={onRemove}
-          className="rounded p-0.5 transition-colors hover:!text-red-400"
+          className="rounded p-1 transition-colors hover:!text-red-400"
           aria-label="Delete task"
         >
-          <Trash2 size={13} />
+          <Trash2 size={15} />
         </button>
       </div>
     </div>

@@ -10,7 +10,7 @@ interface StockSearchProps {
 export function StockSearch({ onSelect }: StockSearchProps): React.ReactElement {
   const [query, setQuery] = useState('')
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['stock-search', query],
     queryFn: () => searchSymbol(query),
     enabled: query.length >= 1,
@@ -42,6 +42,8 @@ export function StockSearch({ onSelect }: StockSearchProps): React.ReactElement 
         <div className="absolute top-full right-0 left-0 z-10 mt-1 max-h-60 overflow-auto rounded-lg border border-white/10 bg-gray-900/95 shadow-xl backdrop-blur-md">
           {isLoading ? (
             <div className="p-3 text-center text-xs text-white/40">Searching...</div>
+          ) : isError ? (
+            <div className="p-3 text-center text-xs text-red-400/70">Search unavailable</div>
           ) : data?.result?.length ? (
             data.result.slice(0, 8).map((item) => (
               <button

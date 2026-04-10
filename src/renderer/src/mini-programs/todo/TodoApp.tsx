@@ -39,16 +39,16 @@ export function TodoApp(): React.ReactElement {
   )
 
   return (
-    <div className="flex h-full flex-col gap-3 overflow-auto">
+    <div className="flex h-full flex-col gap-4 overflow-auto">
       <AddTodoForm
         onAdd={(text, opts) => addTodo(text, opts as { dueDate?: string; priority?: Priority })}
       />
 
       {/* Pending section */}
       <section>
-        <h2 className="mb-1.5 flex items-center gap-1.5 px-1 text-sm font-semibold text-white/50 uppercase tracking-wider">
+        <h2 className="mb-2 flex items-center gap-2 px-1 text-base font-semibold text-white/50 uppercase tracking-wider">
           Todo
-          <span className="rounded-full bg-white/10 px-1.5 py-0.5 text-xs font-normal normal-case tracking-normal text-white/60">
+          <span className="rounded-full bg-white/10 px-2 py-0.5 text-sm font-normal normal-case tracking-normal text-white/60">
             {pending.length}
           </span>
         </h2>
@@ -74,11 +74,11 @@ export function TodoApp(): React.ReactElement {
       <section>
         <button
           onClick={() => setCompletedOpen((v) => !v)}
-          className="mb-1.5 flex w-full items-center gap-1.5 px-1 text-sm font-semibold text-white/50 uppercase tracking-wider hover:text-white/70"
+          className="mb-2 flex w-full items-center gap-2 px-1 text-base font-semibold text-white/50 uppercase tracking-wider hover:text-white/70"
         >
-          {completedOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+          {completedOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
           Completed
-          <span className="rounded-full bg-white/10 px-1.5 py-0.5 text-xs font-normal normal-case tracking-normal text-white/60">
+          <span className="rounded-full bg-white/10 px-2 py-0.5 text-sm font-normal normal-case tracking-normal text-white/60">
             {completed.length}
           </span>
         </button>

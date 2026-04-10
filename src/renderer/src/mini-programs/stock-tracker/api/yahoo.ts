@@ -80,20 +80,26 @@ export async function getStockData(symbol: string): Promise<StockData> {
 }
 
 export async function searchSymbol(query: string): Promise<SymbolSearchResult> {
-  const url = `https://query2.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(query)}&newsCount=0&enableFuzzyQuery=false&enableCb=false`
+  const url = `https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(query)}&quotesCount=8&newsCount=0&enableFuzzyQuery=true`
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const json = (await window.api.httpGet(url)) as any
+  const json = (await window.api.httpGet(url, {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Accept': 'application/json'
+  })) as any
   const quotes: any[] = json?.quotes ?? [] // eslint-disable-line @typescript-eslint/no-explicit-any
 
   return {
     count: quotes.length,
     result: quotes
-      .filter((q) => q.typeDisp === 'Equity' || q.typeDisp === 'ETF')
+      .filter((q) => {
+        const t = ((q.typeDisp ?? q.quoteType ?? '') as string).toLowerCase()
+        return t === 'equity' || t === 'etf'
+      })
       .map((q) => ({
         description: q.longname ?? q.shortname ?? q.symbol,
         displaySymbol: q.symbol,
         symbol: q.symbol,
-        type: q.typeDisp ?? 'Equity'
+        type: q.typeDisp ?? q.quoteType ?? 'Equity'
       }))
   }
 }
