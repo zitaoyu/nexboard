@@ -35,7 +35,7 @@ const DEFAULT_WIDGETS: WidgetInstance[] = [
   {
     instanceId: "default-stock",
     widgetId: "stock-tracker:ticker",
-    config: { symbols: ["MSFT"] },
+    config: { symbols: ["MSFT", "AAPL"] },
     layout: { x: 0, y: 5, w: 4, h: 4, minW: 2, minH: 2, maxW: 4, maxH: 12 },
   },
 ];
