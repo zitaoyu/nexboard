@@ -81,11 +81,10 @@ export async function getStockData(symbol: string): Promise<StockData> {
 
 export async function searchSymbol(query: string): Promise<SymbolSearchResult> {
   const url = `https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(query)}&quotesCount=8&newsCount=0&enableFuzzyQuery=true`
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const json = (await window.api.httpGet(url, {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
     'Accept': 'application/json'
-  })) as any
+  })) as any // eslint-disable-line @typescript-eslint/no-explicit-any
   const quotes: any[] = json?.quotes ?? [] // eslint-disable-line @typescript-eslint/no-explicit-any
 
   return {
