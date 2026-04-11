@@ -1,6 +1,6 @@
 {
   "name": "nexboard",
-  "version": "1.2.0",
+  "version": "2.0.1",
   "description": "A customizable desktop dashboard with widgets and mini programs",
   "main": "./out/main/index.js",
   "author": "NexBoard",
