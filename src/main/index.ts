@@ -21,6 +21,12 @@ let saveTimer: ReturnType<typeof setTimeout> | null = null
 const WINDOW_WIDTH = 400
 const WINDOW_MARGIN = 16
 
+function getIconPath(): string {
+  return is.dev
+    ? join(__dirname, '../../resources/tray-icon.png')
+    : join(process.resourcesPath, 'tray-icon.png')
+}
+
 function createWindow(): void {
   // Position in the top-right corner of the screen (used as default)
   const primaryDisplay = screen.getPrimaryDisplay()
@@ -35,6 +41,7 @@ function createWindow(): void {
   const bounds = loadWindowBounds(defaultBounds)
 
   mainWindow = new BrowserWindow({
+    icon: nativeImage.createFromPath(getIconPath()),
     width: bounds.width,
     height: bounds.height,
     x: bounds.x,
@@ -85,10 +92,7 @@ function createWindow(): void {
 }
 
 function createTray(): void {
-  const iconPath = is.dev
-    ? join(__dirname, '../../resources/tray-icon.png')
-    : join(process.resourcesPath, 'tray-icon.png')
-  const icon = nativeImage.createFromPath(iconPath)
+  const icon = nativeImage.createFromPath(getIconPath()).resize({ width: 32, height: 32 })
   tray = new Tray(icon)
 
   const contextMenu = Menu.buildFromTemplate([
@@ -113,7 +117,19 @@ function createTray(): void {
   ])
 
   tray.setToolTip('NexBoard')
-  tray.setContextMenu(contextMenu)
+
+  tray.on('click', () => {
+    if (!mainWindow) return
+    if (mainWindow.isVisible()) {
+      mainWindow.focus()
+    } else {
+      mainWindow.show()
+    }
+  })
+
+  tray.on('right-click', () => {
+    tray?.popUpContextMenu(contextMenu)
+  })
 }
 
 app.whenReady().then(() => {

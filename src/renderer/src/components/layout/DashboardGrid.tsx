@@ -1,6 +1,6 @@
-import { useMemo, useCallback, useState } from "react";
+import { useMemo, useCallback } from "react";
 import { Responsive, WidthProvider } from "react-grid-layout";
-import { Grid3X3, Maximize2, Minimize2, Settings } from "lucide-react";
+import { Grid3X3, Settings } from "lucide-react";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { useMiniProgramStore } from "@/stores/mini-program-store";
 import { useSettingsStore } from "@/stores/settings-store";
@@ -17,14 +17,6 @@ export function DashboardGrid(): React.ReactElement {
   const updateLayout = useDashboardStore((s) => s.updateLayout);
   const openLauncher = useMiniProgramStore((s) => s.openLauncher);
   const toggleSettings = useSettingsStore((s) => s.toggleSettings);
-  const [isKiosk, setIsKiosk] = useState(false);
-
-  const toggleKiosk = useCallback(() => {
-    const next = !isKiosk;
-    setIsKiosk(next);
-    window.api.setKiosk(next);
-  }, [isKiosk]);
-
   const layouts = useMemo(() => {
     return widgets.map((w) => ({
       i: w.instanceId,
@@ -66,15 +58,6 @@ export function DashboardGrid(): React.ReactElement {
           </div>
         ))}
       </ResponsiveGridLayout>
-
-      {/* Kiosk — far left */}
-      <button
-        onClick={toggleKiosk}
-        className={`absolute bottom-4 left-4 z-40 rounded-full bg-white/10 p-3 shadow-lg transition-all hover:bg-white/20 ${isKiosk ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}
-        title={isKiosk ? "Exit Kiosk Mode" : "Enter Kiosk Mode"}
-      >
-        {isKiosk ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
-      </button>
 
       {/* Settings — third from right */}
       <button
