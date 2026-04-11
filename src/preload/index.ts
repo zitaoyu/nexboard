@@ -6,8 +6,6 @@ const api = {
     ipcRenderer.invoke('platform:get'),
   httpGet: (url: string, headers?: Record<string, string>): Promise<unknown> =>
     ipcRenderer.invoke('http:get', url, headers),
-  setKiosk: (enabled: boolean): void =>
-    ipcRenderer.send('window:set-kiosk', enabled),
   pickPhotos: (): Promise<string[]> =>
     ipcRenderer.invoke('dialog:pick-photos'),
   readFileAsDataUrl: (filePath: string): Promise<string> =>

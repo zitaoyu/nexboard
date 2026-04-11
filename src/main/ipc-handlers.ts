@@ -28,11 +28,6 @@ export function registerIpcHandlers(): void {
     win?.close()
   })
 
-  ipcMain.on('window:set-kiosk', (event, enabled: boolean) => {
-    const win = BrowserWindow.fromWebContents(event.sender)
-    win?.setFullScreen(enabled)
-  })
-
   ipcMain.handle('http:get', async (_event, url: string, headers?: Record<string, string>) => {
     const res = await net.fetch(url, headers ? { headers } : undefined)
     if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`)

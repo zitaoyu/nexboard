@@ -3,7 +3,6 @@ import { ElectronAPI } from '@electron-toolkit/preload'
 interface NexBoardAPI {
   getPlatform(): Promise<{ platform: string; version: string }>
   httpGet(url: string, headers?: Record<string, string>): Promise<unknown>
-  setKiosk(enabled: boolean): void
   pickPhotos(): Promise<string[]>
   readFileAsDataUrl(filePath: string): Promise<string>
   resetWindowBounds(): void
